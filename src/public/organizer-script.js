@@ -271,9 +271,38 @@ function showRoundStatus(roundIndex) {
 
 // Copy code to clipboard
 function copyCode() {
-  navigator.clipboard.writeText(competitionCode);
-  alert('✓ Code copied: ' + competitionCode);
+  const codeEl = document.getElementById("codeValue");
+  if (!codeEl) return;
+
+  const text = codeEl.textContent || codeEl.innerText || "";
+  if (!text) return;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(err => {
+      console.error("Clipboard copy failed:", err);
+    });
+  } else {
+    // Fallback for older browsers
+    const temp = document.createElement("textarea");
+    temp.value = text;
+    document.body.appendChild(temp);
+    temp.select();
+    try {
+      document.execCommand("copy");
+    } catch (e) {
+      console.error("execCommand copy failed:", e);
+    }
+    document.body.removeChild(temp);
+  }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const copyBtn = document.getElementById("copyBtn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", copyCode);
+  }
+});
+
 
 // Socket events
 socket.on('participantJoined', (data) => {

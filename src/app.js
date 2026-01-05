@@ -13,8 +13,44 @@ require('./config/database');
 
 const app = express();
 
-// Security Middleware
-app.use(helmet());
+
+// Security headers (including CSP) via Helmet
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        // Fallback for any resource type not explicitly listed
+        defaultSrc: ["'self'"],
+
+        // Allow scripts from our own origin + specific CDNs we use
+        scriptSrc: [
+          "'self'",
+          "https://cdn.socket.io",    // Socket.IO client CDN
+          "https://cdn.sheetjs.com",  // SheetJS (xlsx) CDN
+          "https://cdnjs.cloudflare.com", // html2pdf and other libs from cdnjs
+        ],
+
+        // Allow XHR / fetch / WebSocket connections to our backend
+        connectSrc: [
+          "'self'",
+          "ws://localhost:3000",      // Socket.IO / WS endpoint in dev
+          "http://localhost:3000",    // REST API endpoint in dev
+          "https://cdn.socket.io", // allow Socket.IO source map / any XHR from this CDN
+        ],
+
+        // Allow images from same origin and inline data URLs (e.g. base64)
+        imgSrc: ["'self'", "data:"],
+
+        // Allow styles from same origin and inline styles (for convenience in this app)
+        styleSrc: ["'self'", "'unsafe-inline'"],
+
+        // Block inline JS attributes like onclick="" for better XSS protection
+        scriptSrcAttr: ["'none'"],
+      },
+    },
+  }),
+);
+
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
