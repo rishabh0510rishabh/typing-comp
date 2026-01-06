@@ -4,6 +4,7 @@ const { updateAndBroadcastLeaderboard } = require('../utils/leaderboard');
 async function handleStartRound(socket, io, data, activeCompetitions) {
   const { competitionId, roundIndex } = data;
 
+
   try {
     const competition = await Competition.findById(competitionId);
     if (!competition) {
@@ -61,6 +62,7 @@ async function handleStartRound(socket, io, data, activeCompetitions) {
     // Auto-end after duration
     setTimeout(async () => {
       const competitionDoc = await Competition.findById(competitionId);
+      await handleEndRound(competitionId, roundIndex, competitionDoc, compData, io, activeCompetitions);
       await handleEndRound(
         competitionId,
         roundIndex,
@@ -81,7 +83,7 @@ async function handleEndRound(
   competition,
   compData,
   io
-) {
+  , activeCompetitions) {
   try {
     if (!compData || !compData.roundInProgress) return;
     compData.roundInProgress = false;
@@ -125,8 +127,8 @@ async function handleEndRound(
     const averageAccuracy =
       accuracyValues.length > 0
         ? Math.round(
-            accuracyValues.reduce((a, b) => a + b, 0) / accuracyValues.length
-          )
+          accuracyValues.reduce((a, b) => a + b, 0) / accuracyValues.length
+        )
         : 0;
 
     // Save to DB
@@ -194,7 +196,7 @@ async function handleEndRound(
 
     // Check if final round
     if (roundIndex === competition.rounds.length - 1) {
-      await handleShowFinalResults(competitionId, compData, competition, io);
+      await handleShowFinalResults(competitionId, compData, competition, io, activeCompetitions);
     }
   } catch (error) {
     console.error('End round error:', error);
@@ -206,7 +208,7 @@ async function handleShowFinalResults(
   compData,
   competition,
   io
-) {
+  , activeCompetitions) {
   try {
     const participantsArray = Array.from(compData.participants.values());
 
@@ -216,14 +218,14 @@ async function handleShowFinalResults(
         const avgWpm =
           scores.length > 0
             ? Math.round(
-                scores.reduce((sum, s) => sum + s.wpm, 0) / scores.length
-              )
+              scores.reduce((sum, s) => sum + s.wpm, 0) / scores.length
+            )
             : 0;
         const avgAccuracy =
           scores.length > 0
             ? Math.round(
-                scores.reduce((sum, s) => sum + s.accuracy, 0) / scores.length
-              )
+              scores.reduce((sum, s) => sum + s.accuracy, 0) / scores.length
+            )
             : 0;
         const highestWpm =
           scores.length > 0 ? Math.max(...scores.map((s) => s.wpm)) : 0;
@@ -306,6 +308,13 @@ async function handleShowFinalResults(
         totalBackspaces: r.totalBackspaces,
       })),
     });
+
+    // MEMORY LEAK FIX: Cleanup active competition state
+    if (activeCompetitions && activeCompetitions.has(competitionId)) {
+      activeCompetitions.delete(competitionId);
+      console.log(`✓ [MEMORY] Cleared competition ${competitionId} from memory`);
+    }
+
   } catch (error) {
     console.error('Final results error:', error);
   }
