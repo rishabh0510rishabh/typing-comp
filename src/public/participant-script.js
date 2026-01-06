@@ -234,6 +234,7 @@ function startTimer(duration) {
 }
 
 // Error display
+// Error display
 function showError(message) {
   if (typeof document === 'undefined') return;
 
@@ -315,6 +316,9 @@ socket.on('joinSuccess', (data) => {
 
 socket.on('participantJoined', (data) => {
   participantCountDisplay.textContent = data.totalParticipants;
+});
+socket.on('error', (data) => {
+  showError(data?.message || 'Invalid participation code. Please try again.');
 });
 
 socket.on('error', (data) => {
