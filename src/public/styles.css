@@ -2127,3 +2127,26 @@ body {
   color: #000;
   cursor: default;
 }
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  opacity: 0.7;
+}
+
+.eye-icon:hover {
+  opacity: 1;
+}
