@@ -1,4 +1,5 @@
 const express = require('express');
+//JWT TOKEN IMPLEMENTED 
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const Organizer = require('../models/Organizer');
