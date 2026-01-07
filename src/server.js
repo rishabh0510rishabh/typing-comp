@@ -7,9 +7,8 @@ const logger = require('./config/logger');
 const server = http.createServer(app);
 
 const io = socketIo(server, {
-  cors: { origin: "*", methods: ["GET", "POST"] }
+  cors: { origin: '*', methods: ['GET', 'POST'] },
 });
-
 
 require('./socket/events')(io);
 
