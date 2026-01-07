@@ -271,25 +271,27 @@ async function handleShowFinalResults(
       })),
     });
 
-    // Update each participant
-    for (const ranking of finalRankings) {
-      await Competition.findByIdAndUpdate(
-        competitionId,
-        {
-          $set: {
-            'participants.$[elem].finalRank': ranking.rank,
-            'participants.$[elem].totalWpm': ranking.averageWpm,
-            'participants.$[elem].totalAccuracy': ranking.averageAccuracy,
-            'participants.$[elem].roundsCompleted':
-              ranking.totalRoundsCompleted,
-            'participants.$[elem].roundScores': ranking.roundScores,
+    // PERF FIX: Use bulkWrite instead of loop
+    if (finalRankings.length > 0) {
+      const bulkOps = finalRankings.map(ranking => ({
+        updateOne: {
+          filter: {
+            _id: competitionId,
+            'participants.name': ranking.participantName
           },
-        },
-        {
-          arrayFilters: [{ 'elem.name': ranking.participantName }],
-          new: true,
+          update: {
+            $set: {
+              'participants.$.finalRank': ranking.rank,
+              'participants.$.totalWpm': ranking.averageWpm,
+              'participants.$.totalAccuracy': ranking.averageAccuracy,
+              'participants.$.roundsCompleted': ranking.totalRoundsCompleted,
+              'participants.$.roundScores': ranking.roundScores
+            }
+          }
         }
-      );
+      }));
+
+      await Competition.bulkWrite(bulkOps);
     }
 
     console.log('✓ Competition completed');
