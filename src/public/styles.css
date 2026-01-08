@@ -754,6 +754,42 @@ select.form-control {
   outline-offset: 2px;
 }
 
+/* Enhanced keyboard focus indicators */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb, 33, 128, 141), 0.25);
+}
+
+/* Focus for interactive elements */
+.nav-link:focus-visible,
+.round-btn:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb, 33, 128, 141), 0.25);
+}
+
+/* Skip link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  padding: 8px;
+  text-decoration: none;
+  z-index: 1000;
+}
+
+.skip-link:focus-visible {
+  top: 6px;
+}
+
 /* Dark mode specifics */
 [data-color-scheme='dark'] .btn--outline {
   border: 1px solid var(--color-border-secondary);
