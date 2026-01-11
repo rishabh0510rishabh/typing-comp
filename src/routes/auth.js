@@ -99,7 +99,11 @@ router.post(
   async (req, res) => {
     try {
       const { name, email, password } = req.body;
-
+      if(name.trim().length < 2) {
+        return res.status(400).json({
+          error: 'Name must be at least 2 characters'
+        });
+      }
       const existingOrganizer = await Organizer.findOne({
         email: email.toLowerCase(),
       });
