@@ -63,9 +63,38 @@ const handleValidationErrors = (req, res, next) => {
 router.post('/create', auth, validateCompetitionCreation, handleValidationErrors, async (req, res) => {
   try {
     const { name, description, rounds } = req.body;
-    if (!name || !rounds || rounds.length === 0) {
-      return res.status(400).json({ error: 'Name and rounds required' });
+    if (!name) {
+  return res.status(400).json({
+    error: 'Competition name is required'
+  });
+}
+
+if (name.length < 3) {
+  return res.status(400).json({
+    error: 'Competition name must be at least 3 characters'
+  });
+}
+
+if (!Array.isArray(rounds) || rounds.length === 0) {
+  return res.status(400).json({
+    error: 'At least one round is required'
+  });
+}
+
+if (rounds.some(r => r.text.length <10 || !(30 <= r.duration && r.duration <= 600))) {
+  return res.status(400).json({
+    error: 'All rounds must have text minimum of 10 characters and (30-600 seconds) duration'
+  });
+}
+
+  const maxPlayers = req.body.maxPlayers;
+  if (maxPlayers !== undefined) {
+    if (typeof maxPlayers !== 'number' || maxPlayers < 1) {
+      return res.status(400).json({
+        error: 'Maximum players must be a number greater than 0'
+      });
     }
+  }
 
     const code = generateCode();
 
