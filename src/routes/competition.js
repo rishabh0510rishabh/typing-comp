@@ -68,7 +68,9 @@ router.post('/create', auth, validateCompetitionCreation, handleValidationErrors
     }
   }
 
+  logger.info(`Generaring competition code for organizer: ${req.organizer.id}`);
   const code = generateCode();
+  logger.info(`Competition code generated: ${code}`);
 
   const competition = new Competition({
     name: name.trim(),
@@ -102,7 +104,7 @@ router.post('/create', auth, validateCompetitionCreation, handleValidationErrors
   });
 
   await competition.save();
-  logger.info(`✓ Competition created: ${code}`); // Using logger instead of console.log if available, but staying consistent with file
+  logger.info(`✓ Competition created successfully with code: ${code}`);
   res.json({ success: true, code, competitionId: competition._id });
 }));
 
