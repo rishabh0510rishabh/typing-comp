@@ -1,9 +1,9 @@
 const generateCode = require('../../src/utils/codeGenerator');
 
 describe('Code Generator Utility', () => {
-    test('should generate a code of exactly 6 characters', () => {
+    test('should generate a code of exactly 5 characters', () => {
         const code = generateCode();
-        expect(code).toHaveLength(6);
+        expect(code).toHaveLength(5);
     });
 
     test('should generate a code containing only uppercase alphanumeric characters', () => {

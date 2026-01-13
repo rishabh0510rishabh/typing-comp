@@ -2660,13 +2660,15 @@ body {
   display: flex !important;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  /* Move top */
   width: 100vw;
   /* Full viewport width */
   min-height: 90vh;
   /* Almost full viewport height */
   margin: 0;
-  padding: 20px;
+  padding: 60px 20px;
+  /* Add top padding */
   box-sizing: border-box;
 }
 
@@ -2760,18 +2762,18 @@ body {
 
 /* Join Button */
 #resScreenJoinBtn {
-  margin-top: 60px !important;
-  font-size: 1.5rem;
-  /* Big text */
-  padding: 18px 40px;
-  /* Big click area */
-  border-radius: 12px;
-  min-width: 300px;
-  box-shadow: 0 10px 20px rgba(var(--color-primary-rgb), 0.3);
+  margin-top: 32px !important;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 99px;
+  min-width: 160px;
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
   transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.5px;
 }
 
 #resScreenJoinBtn:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(var(--color-primary-rgb), 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(var(--color-primary-rgb), 0.4);
 }

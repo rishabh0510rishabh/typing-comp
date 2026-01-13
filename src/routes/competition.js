@@ -37,8 +37,8 @@ const validateCompetitionCreation = [
 
 const validateCompetitionCode = [
   param('code')
-    .isLength({ min: 6, max: 6 })
-    .withMessage('Competition code must be exactly 6 characters')
+    .isLength({ min: 5, max: 5 })
+    .withMessage('Competition code must be exactly 5 characters')
     .matches(/^[A-Z0-9]+$/)
     .withMessage('Competition code must contain only uppercase letters and numbers')
 ];
