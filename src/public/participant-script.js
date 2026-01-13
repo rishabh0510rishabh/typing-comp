@@ -478,19 +478,19 @@ socket.on('roundEnded', (data) => {
       joinBtn.className = 'btn-primary';
       joinBtn.textContent = 'Join New Competition';
       joinBtn.style.marginTop = '30px';
-      joinBtn.style.display = 'block';
-      joinBtn.style.marginLeft = 'auto';
-      joinBtn.style.marginRight = 'auto';
+      // Inline styles removed to rely on CSS
       joinBtn.onclick = () => window.location.href = '/participant';
 
       heatmapContainer.appendChild(joinBtn);
     }
 
     // Center the heatmap on screen
-    resultsScreen.style.display = 'flex';
-    resultsScreen.style.justifyContent = 'center';
-    resultsScreen.style.alignItems = 'center';
-    resultsScreen.style.minHeight = '100vh';
+    resultsScreen.classList.add('results-split-view');
+    // Remove inline styles that might conflict or were temporary
+    resultsScreen.style.display = '';
+    resultsScreen.style.justifyContent = '';
+    resultsScreen.style.alignItems = '';
+    resultsScreen.style.minHeight = '';
   }
 });
 
@@ -585,9 +585,10 @@ function renderHeatmap(keyStats) {
 
   // Keyboard Layout
   const rows = [
-    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-    ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='],
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\''],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/']
   ];
 
   let html = `
